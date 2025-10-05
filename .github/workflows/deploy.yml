@@ -43,6 +43,23 @@ jobs:
           EOF
           # include env.js right after opening <head>
           sed -i '0,/<head>/s//<head>\n<script src="env.js"><\/script>/' dist/index.html dist/404.html || true
+      - name: Inject debug overlay (capture runtime errors)
+        run: |
+          cat > dist/debug.js << 'EOF'
+          (function(){
+            function show(msg){
+              var box=document.createElement('div');
+              box.style.cssText='position:fixed;inset:8px;z-index:99999;background:rgba(0,0,0,.75);color:#fff;padding:12px;border-radius:8px;overflow:auto;font:14px system-ui,Segoe UI,Arial';
+              box.innerHTML='<b>Runtime error</b><pre style="white-space:pre-wrap">'+msg+'</pre>';
+              document.body.appendChild(box);
+              console.error('[DEBUG OVERLAY]', msg);
+            }
+            window.addEventListener('error', function(e){show(String(e.error&&e.error.stack||e.message||e));});
+            window.addEventListener('unhandledrejection', function(e){show(String(e.reason&&e.reason.stack||e.reason||e));});
+            console.log('[DEBUG]', 'BASE', window.__BASE_PATH__, 'ENV_URL', (window.__ENV__||{}).EXPO_PUBLIC_SUPABASE_URL);
+          })();
+          EOF
+          sed -i '0,/<head>/s//<head>\n<script src="debug.js"><\/script>/' dist/index.html dist/404.html || true
       - name: Prefix base path for GitHub Pages
         run: |
           REPO="${GITHUB_REPOSITORY#*/}"
