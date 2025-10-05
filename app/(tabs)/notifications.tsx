@@ -13,6 +13,7 @@ import { supabase, Product } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { Calendar, CircleAlert as AlertCircle, Package } from 'lucide-react-native';
 import { router } from 'expo-router';
+import { withBase } from '@/lib/webPath';
 
 export default function NotificationsScreen() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -92,7 +93,7 @@ export default function NotificationsScreen() {
     return (
       <TouchableOpacity
         style={[styles.notificationCard, expired && styles.notificationCardExpired]}
-        onPress={() => router.push({ pathname: '/(tabs)/product/[id]', params: { id: item.id } })}
+  onPress={() => router.push({ pathname: withBase('/(tabs)/product/[id]') as any, params: { id: item.id } })}
         activeOpacity={0.85}
       >
         <View style={styles.notificationIconContainer}>

@@ -1,5 +1,7 @@
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import { Redirect } from 'expo-router';
+import { router } from 'expo-router';
+import { useEffect } from 'react';
+import { withBase } from '@/lib/webPath';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Index() {
@@ -13,11 +15,15 @@ export default function Index() {
     );
   }
 
-  if (!user) {
-    return <Redirect href="/(auth)/login" />;
-  }
+  useEffect(() => {
+    if (!user) {
+      router.replace(withBase('/(auth)/login') as any);
+    } else {
+      router.replace(withBase('/(tabs)') as any);
+    }
+  }, [user]);
 
-  return <Redirect href="/(tabs)" />;
+  return null;
 }
 
 const styles = StyleSheet.create({

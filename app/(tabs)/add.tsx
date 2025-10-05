@@ -16,6 +16,7 @@ import {
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { router } from 'expo-router';
+import { withBase } from '@/lib/webPath';
 import * as ImagePicker from 'expo-image-picker';
 import type { CameraType } from 'expo-camera';
 import { Camera, Image as ImageIcon, Calendar } from 'lucide-react-native';
@@ -215,7 +216,7 @@ export default function AddProductScreen() {
               year: '',
             });
             setImageUri(null);
-            router.push('/(tabs)');
+            router.push(withBase('/(tabs)') as any);
           },
         },
       ]);

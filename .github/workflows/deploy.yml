@@ -46,9 +46,11 @@ jobs:
       - name: Prefix base path for GitHub Pages
         run: |
           REPO="${GITHUB_REPOSITORY#*/}"
+          echo "window.__BASE_PATH__='/${REPO}';" > dist/base.js
           # Prefix absolute asset/script href/src that start with "/" to "/$REPO/"
           sed -i 's|src="/|src="/'"$REPO"'/|g' dist/index.html dist/404.html || true
           sed -i 's|href="/|href="/'"$REPO"'/|g' dist/index.html dist/404.html || true
+          sed -i '0,/<head>/s//<head>\n<script src="base.js"><\/script>/' dist/index.html dist/404.html || true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

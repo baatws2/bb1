@@ -15,6 +15,7 @@ import {
 import { supabase, Product } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { router, useLocalSearchParams } from 'expo-router';
+import { withBase } from '@/lib/webPath';
 import * as ImagePicker from 'expo-image-picker';
 import { ArrowLeft, Calendar, Save, Trash2, Image as ImageIcon, Camera } from 'lucide-react-native';
 
@@ -230,7 +231,7 @@ export default function ProductDetailScreen() {
           }
         } catch {}
       }
-      router.replace('/(tabs)');
+  router.replace(withBase('/(tabs)') as any);
     } catch (err: any) {
       Alert.alert('خطأ', err.message || 'تعذر الحذف');
     } finally {
