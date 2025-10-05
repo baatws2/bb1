@@ -1,14 +1,15 @@
 import { Link, Stack } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
+import { withBase } from '@/lib/webPath';
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen options={{ title: 'غير موجود' }} />
       <View style={styles.container}>
-        <Text style={styles.text}>This screen doesn't exist.</Text>
-        <Link href="/" style={styles.link}>
-          <Text>Go to home screen!</Text>
+        <Text style={styles.text}>هذه الشاشة غير موجودة.</Text>
+        <Link href={withBase('/(tabs)') as any} style={styles.link}>
+          <Text>انتقل إلى الشاشة الرئيسية!</Text>
         </Link>
       </View>
     </>
