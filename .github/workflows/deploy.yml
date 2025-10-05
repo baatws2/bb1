@@ -33,6 +33,16 @@ jobs:
         run: npx expo export --platform web --output-dir dist
       - name: Add SPA fallback (404.html)
         run: cp dist/index.html dist/404.html
+      - name: Inject runtime env (window.__ENV__)
+        run: |
+          cat > dist/env.js << 'EOF'
+          window.__ENV__ = {
+            EXPO_PUBLIC_SUPABASE_URL: '${EXPO_PUBLIC_SUPABASE_URL}',
+            EXPO_PUBLIC_SUPABASE_ANON_KEY: '${EXPO_PUBLIC_SUPABASE_ANON_KEY}',
+          };
+          EOF
+          # include env.js right after opening <head>
+          sed -i '0,/<head>/s//<head>\n<script src="env.js"><\/script>/' dist/index.html dist/404.html || true
       - name: Prefix base path for GitHub Pages
         run: |
           REPO="${GITHUB_REPOSITORY#*/}"
