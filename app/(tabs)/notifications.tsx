@@ -50,7 +50,7 @@ export default function NotificationsScreen() {
 
       if (error) throw error;
 
-      const alertProducts = data?.filter((p) => {
+  const alertProducts = data?.filter((p: Product) => {
         const daysRemaining = getDaysRemaining(p.expiry_date);
         return daysRemaining <= 30;
       }) || [];
