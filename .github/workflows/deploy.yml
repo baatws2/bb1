@@ -68,6 +68,8 @@ jobs:
           sed -i 's|src="/|src="/'"$REPO"'/|g' dist/index.html dist/404.html || true
           sed -i 's|href="/|href="/'"$REPO"'/|g' dist/index.html dist/404.html || true
           sed -i '0,/<head>/s//<head>\n<script src="base.js"><\/script>/' dist/index.html dist/404.html || true
+          # Fix absolute paths inside bundled JS for runtime chunks (dynamic imports)
+          find dist -type f -name "*.js" -print0 | xargs -0 sed -i 's|"/_expo/|"/'"$REPO"'/_expo/|g'
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

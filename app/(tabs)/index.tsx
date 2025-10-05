@@ -17,7 +17,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '@/contexts/AuthContext';
 import { TriangleAlert as AlertTriangle, Search, Package, Calendar, MapPin, X } from 'lucide-react-native';
 import { router } from 'expo-router';
-import { withBase } from '@/lib/webPath';
 
 export default function ProductsScreen() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -151,7 +150,7 @@ export default function ProductsScreen() {
     return (
       <TouchableOpacity
         style={[styles.productCard, expired && styles.productCardExpired, expiringSoon && styles.productCardExpiring]}
-  onPress={() => router.push({ pathname: withBase('/(tabs)/product/[id]') as any, params: { id: item.id } })}
+  onPress={() => router.push({ pathname: '/(tabs)/product/[id]', params: { id: item.id } })}
         activeOpacity={0.8}
       >
         <View style={styles.productCardContent}>
