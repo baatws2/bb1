@@ -1,5 +1,4 @@
 import { Redirect, Stack } from 'expo-router';
-import { withBase } from '@/lib/webPath';
 import { useAuth } from '@/contexts/AuthContext';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
@@ -14,9 +13,7 @@ export default function AuthLayout() {
     );
   }
 
-  if (user) {
-    return <Redirect href={withBase('/(tabs)') as any} />;
-  }
+  if (user) return <Redirect href={'/(tabs)' as any} />;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

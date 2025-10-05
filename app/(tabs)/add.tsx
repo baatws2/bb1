@@ -216,7 +216,7 @@ export default function AddProductScreen() {
               year: '',
             });
             setImageUri(null);
-            router.push(withBase('/(tabs)') as any);
+            router.push('/(tabs)' as any);
           },
         },
       ]);

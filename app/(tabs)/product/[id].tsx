@@ -231,7 +231,7 @@ export default function ProductDetailScreen() {
           }
         } catch {}
       }
-  router.replace(withBase('/(tabs)') as any);
+  router.replace('/(tabs)' as any);
     } catch (err: any) {
       Alert.alert('خطأ', err.message || 'تعذر الحذف');
     } finally {

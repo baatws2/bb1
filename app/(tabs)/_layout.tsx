@@ -1,5 +1,4 @@
 import { Redirect, Tabs } from 'expo-router';
-import { withBase } from '@/lib/webPath';
 import { Calendar, CirclePlus as PlusCircle, User, Bell } from 'lucide-react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
@@ -15,9 +14,7 @@ export default function TabsLayout() {
     );
   }
 
-  if (!user) {
-    return <Redirect href={withBase('/(auth)/login') as any} />;
-  }
+  if (!user) return <Redirect href={'/(auth)/login' as any} />;
 
   return (
     <Tabs

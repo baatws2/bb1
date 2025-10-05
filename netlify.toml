@@ -1,0 +1,9 @@
+[build]
+  command = "npx expo export --platform web --output-dir dist"
+  publish = "dist"
+
+# SPA fallback so client routing works on refresh and deep links
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
