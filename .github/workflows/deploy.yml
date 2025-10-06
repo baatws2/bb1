@@ -18,9 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Pass Supabase public values at build time
-      EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
-      EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
+      # Supabase public values (anon key is safe to expose client-side)
+      EXPO_PUBLIC_SUPABASE_URL: https://hyxhlvoniyugqdogagzo.supabase.co
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5eGhsdm9uaXl1Z3Fkb2dhZ3pvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3Njk1OTAsImV4cCI6MjA3NTM0NTU5MH0.VXyqCFgAoZBfQRCMy0k2ixNZVJ-GUW0tFwmePj1QntM
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

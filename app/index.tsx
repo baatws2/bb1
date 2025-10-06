@@ -1,5 +1,6 @@
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { Redirect } from 'expo-router';
+import { withBase } from '@/lib/webPath';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Index() {
@@ -16,8 +17,8 @@ export default function Index() {
   // Use typed route groups for internal navigation so the URL stays clean:
   // - '/(auth)/login' becomes '/login'
   // - '/(tabs)' becomes '/'
-  if (!user) return <Redirect href="/(auth)/login" />;
-  return <Redirect href="/(tabs)" />;
+  if (!user) return <Redirect href={withBase('/login') as any} />;
+  return <Redirect href={withBase('/') as any} />;
 }
 
 const styles = StyleSheet.create({
