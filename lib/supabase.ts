@@ -33,8 +33,25 @@ function readConfigFromUrlOrStorage() {
 }
 
 const viaUrl = readConfigFromUrlOrStorage();
-const envUrl = (viaUrl.url as string) || (runtimeEnv.EXPO_PUBLIC_SUPABASE_URL as string) || process.env.EXPO_PUBLIC_SUPABASE_URL;
-const envKey = (viaUrl.key as string) || (runtimeEnv.EXPO_PUBLIC_SUPABASE_ANON_KEY as string) || process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+
+// Detect GitHub Pages base path '/bb1' (or any repo pages) and provide a last-resort fallback
+function pagesFallback() {
+  if (typeof window === 'undefined') return { url: undefined as string | undefined, key: undefined as string | undefined };
+  const path = window.location.pathname || '';
+  const isPages = window.location.host.endsWith('github.io');
+  const underRepo = /\/bb1(\/|$)/.test(path);
+  if (isPages && underRepo) {
+    return {
+      url: 'https://hyxhlvoniyugqdogagzo.supabase.co',
+      key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5eGhsdm9uaXl1Z3Fkb2dhZ3pvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3Njk1OTAsImV4cCI6MjA3NTM0NTU5MH0.VXyqCFgAoZBfQRCMy0k2ixNZVJ-GUW0tFwmePj1QntM',
+    } as const;
+  }
+  return { url: undefined, key: undefined } as const;
+}
+
+const pagesEnv = pagesFallback();
+const envUrl = (viaUrl.url as string) || (runtimeEnv.EXPO_PUBLIC_SUPABASE_URL as string) || process.env.EXPO_PUBLIC_SUPABASE_URL || pagesEnv.url;
+const envKey = (viaUrl.key as string) || (runtimeEnv.EXPO_PUBLIC_SUPABASE_ANON_KEY as string) || process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || pagesEnv.key;
 
 function createSupabaseFallback() {
   console.warn('[Supabase] Not configured. Running in demo mode (no backend).');
