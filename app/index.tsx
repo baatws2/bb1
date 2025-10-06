@@ -16,8 +16,8 @@ export default function Index() {
   }
 
   useEffect(() => {
-    if (!user) router.replace(withBase('/(auth)/login') as any);
-    else router.replace(withBase('/(tabs)') as any);
+    if (!user) router.replace(withBase('/login') as any);
+    else router.replace(withBase('/') as any);
   }, [user]);
 
   return null;

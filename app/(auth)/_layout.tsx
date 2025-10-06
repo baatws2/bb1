@@ -14,7 +14,7 @@ export default function AuthLayout() {
     );
   }
 
-  if (user) return <Redirect href={withBase('/(tabs)') as any} />;
+  if (user) return <Redirect href={withBase('/') as any} />;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

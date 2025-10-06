@@ -21,7 +21,7 @@ export default function ProfileScreen() {
       setSigningOut(true);
   await signOut();
   setConfirmOpen(false);
-  router.replace(withBase('/(auth)/login') as any);
+  router.replace(withBase('/login') as any);
     } catch (error: any) {
       setSigningOut(false);
       Alert.alert('خطأ', error.message);

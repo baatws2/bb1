@@ -15,7 +15,7 @@ export default function TabsLayout() {
     );
   }
 
-  if (!user) return <Redirect href={withBase('/(auth)/login') as any} />;
+  if (!user) return <Redirect href={withBase('/login') as any} />;
 
   return (
     <Tabs

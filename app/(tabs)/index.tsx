@@ -151,7 +151,7 @@ export default function ProductsScreen() {
     return (
       <TouchableOpacity
         style={[styles.productCard, expired && styles.productCardExpired, expiringSoon && styles.productCardExpiring]}
-  onPress={() => router.push({ pathname: withBase('/(tabs)/product/[id]') as any, params: { id: item.id } })}
+  onPress={() => router.push({ pathname: withBase('/product/[id]') as any, params: { id: item.id } })}
         activeOpacity={0.8}
       >
         <View style={styles.productCardContent}>
