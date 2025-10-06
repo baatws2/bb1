@@ -19,14 +19,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Demo mode: if Supabase isn't configured (no env on host), skip auth and enter app.
+    // Demo mode: if Supabase isn't configured (no env on host), show the login screen instead of auto-signing in.
+    // We'll set user upon signIn/signUp if the user proceeds in demo mode.
     if (!isSupabaseConfigured) {
-      const demoUser = {
-        id: 'demo-user',
-        email: 'demo@example.com',
-      } as unknown as User;
-      setUser(demoUser);
       setSession(null);
+      setUser(null);
       setLoading(false);
       return;
     }

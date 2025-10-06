@@ -2,7 +2,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert, Modal } from 'react-na
 import { useAuth } from '@/contexts/AuthContext';
 import { LogOut, Mail, User as UserIcon } from 'lucide-react-native';
 import { router } from 'expo-router';
+import { withBase } from '@/lib/webPath';
 import { useState } from 'react';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
@@ -17,9 +19,9 @@ export default function ProfileScreen() {
   const confirmSignOut = async () => {
     try {
       setSigningOut(true);
-      await signOut();
-      setConfirmOpen(false);
-      router.replace('/(auth)/login');
+  await signOut();
+  setConfirmOpen(false);
+  router.replace(withBase('/(auth)/login') as any);
     } catch (error: any) {
       setSigningOut(false);
       Alert.alert('خطأ', error.message);
@@ -34,6 +36,13 @@ export default function ProfileScreen() {
       </View>
 
       <View style={styles.content}>
+        {!isSupabaseConfigured && (
+          <View style={[styles.infoCard, { borderColor: '#FCD34D', backgroundColor: '#FEF3C7' }]}> 
+            <Text style={[styles.infoText, { color: '#92400E', textAlign: 'center' }]}>يعمل حالياً بوضع العرض التجريبي. لإعداد Supabase بسرعة، افتح رابط الموقع وأضف:
+              {'\n'}?supabaseUrl=YOUR_URL&supabaseAnonKey=YOUR_KEY
+            </Text>
+          </View>
+        )}
         <View style={styles.profileCard}>
           <View style={styles.avatarContainer}>
             <UserIcon size={48} color="#007AFF" />

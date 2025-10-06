@@ -8,7 +8,7 @@ export default function NotFoundScreen() {
       <Stack.Screen options={{ title: 'غير موجود' }} />
       <View style={styles.container}>
         <Text style={styles.text}>هذه الشاشة غير موجودة.</Text>
-        <Link href={withBase('/(tabs)') as any} style={styles.link}>
+        <Link href={withBase('/') as any} style={styles.link}>
           <Text>انتقل إلى الشاشة الرئيسية!</Text>
         </Link>
       </View>

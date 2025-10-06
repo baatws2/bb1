@@ -1,7 +1,7 @@
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
-import { isSupabaseConfigured } from '@/lib/supabase';
+import { withBase } from '@/lib/webPath';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Index() {
@@ -16,12 +16,8 @@ export default function Index() {
   }
 
   useEffect(() => {
-    if (!isSupabaseConfigured) {
-      router.replace('/(tabs)' as any);
-      return;
-    }
-    if (!user) router.replace('/(auth)/login' as any);
-    else router.replace('/(tabs)' as any);
+    if (!user) router.replace(withBase('/(auth)/login') as any);
+    else router.replace(withBase('/(tabs)') as any);
   }, [user]);
 
   return null;

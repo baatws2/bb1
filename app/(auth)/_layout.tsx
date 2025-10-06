@@ -1,15 +1,10 @@
 import { Redirect, Stack } from 'expo-router';
-import { isSupabaseConfigured } from '@/lib/supabase';
+import { withBase } from '@/lib/webPath';
 import { useAuth } from '@/contexts/AuthContext';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
 export default function AuthLayout() {
   const { user, loading } = useAuth();
-
-  // In demo mode (no Supabase), skip auth screens entirely
-  if (!isSupabaseConfigured) {
-    return <Redirect href={'/(tabs)' as any} />;
-  }
 
   if (loading) {
     return (
@@ -19,7 +14,7 @@ export default function AuthLayout() {
     );
   }
 
-  if (user) return <Redirect href={'/(tabs)' as any} />;
+  if (user) return <Redirect href={withBase('/(tabs)') as any} />;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

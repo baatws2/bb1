@@ -3,8 +3,38 @@ import { createClient } from '@supabase/supabase-js';
 
 // Support runtime env (injected via window.__ENV__) for static hosting like GitHub Pages
 const runtimeEnv = (typeof window !== 'undefined' ? (window as any).__ENV__ : undefined) || {};
-const envUrl = (runtimeEnv.EXPO_PUBLIC_SUPABASE_URL as string) || process.env.EXPO_PUBLIC_SUPABASE_URL;
-const envKey = (runtimeEnv.EXPO_PUBLIC_SUPABASE_ANON_KEY as string) || process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+
+// Optional: read config from URL or localStorage when hosting cannot set env vars.
+function readConfigFromUrlOrStorage() {
+  if (typeof window === 'undefined') return {} as { url?: string; key?: string };
+  try {
+    const search = new URLSearchParams(window.location.search);
+    const hash = new URLSearchParams((window.location.hash || '').replace(/^#/, ''));
+    const url = search.get('supabaseUrl') || hash.get('supabaseUrl') || undefined;
+    const key = search.get('supabaseAnonKey') || hash.get('supabaseAnonKey') || undefined;
+
+    const LS_URL = 'SUPABASE_URL';
+    const LS_KEY = 'SUPABASE_ANON_KEY';
+    if (url && key) {
+      try {
+        localStorage.setItem(LS_URL, url);
+        localStorage.setItem(LS_KEY, key);
+        // Clean the URL to avoid leaving secrets in the bar
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+      } catch {}
+    }
+    const storedUrl = localStorage.getItem(LS_URL) || undefined;
+    const storedKey = localStorage.getItem(LS_KEY) || undefined;
+    return { url: url || storedUrl, key: key || storedKey } as { url?: string; key?: string };
+  } catch {
+    return {} as { url?: string; key?: string };
+  }
+}
+
+const viaUrl = readConfigFromUrlOrStorage();
+const envUrl = (viaUrl.url as string) || (runtimeEnv.EXPO_PUBLIC_SUPABASE_URL as string) || process.env.EXPO_PUBLIC_SUPABASE_URL;
+const envKey = (viaUrl.key as string) || (runtimeEnv.EXPO_PUBLIC_SUPABASE_ANON_KEY as string) || process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
 function createSupabaseFallback() {
   console.warn('[Supabase] Not configured. Running in demo mode (no backend).');
