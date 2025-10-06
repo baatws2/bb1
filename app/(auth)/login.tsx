@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { Package } from 'lucide-react-native';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('admin@admin.com');
@@ -56,7 +57,11 @@ export default function LoginScreen() {
         </View>
 
         <View style={styles.form}>
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          {!isSupabaseConfigured ? (
+            <Text style={styles.errorText}>لم يتم تكوين Supabase. سيتم الدخول إلى وضع العرض التجريبي.</Text>
+          ) : error ? (
+            <Text style={styles.errorText}>{error}</Text>
+          ) : null}
 
           <TextInput
             style={styles.input}

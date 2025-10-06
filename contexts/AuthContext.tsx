@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 type AuthContextType = {
   session: Session | null;
@@ -19,6 +19,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Demo mode: if Supabase isn't configured (no env on host), skip auth and enter app.
+    if (!isSupabaseConfigured) {
+      const demoUser = {
+        id: 'demo-user',
+        email: 'demo@example.com',
+      } as unknown as User;
+      setUser(demoUser);
+      setSession(null);
+      setLoading(false);
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -38,6 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
+    if (!isSupabaseConfigured) {
+      setUser({ id: 'demo-user', email } as unknown as User);
+      return;
+    }
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -46,6 +62,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string) => {
+    if (!isSupabaseConfigured) {
+      setUser({ id: 'demo-user', email } as unknown as User);
+      return;
+    }
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -54,6 +74,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
+    if (!isSupabaseConfigured) {
+      setSession(null);
+      setUser(null);
+      return;
+    }
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
     setSession(null);
